@@ -57,13 +57,14 @@ namespace simpcal
             Button b = (Button)sender;
             if (result != 0)
             {
-                equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
                 enter_value = true;
                 operation = b.Content.ToString();
                 history.Text = result.ToString() + " " + operation;
             }
             else
             {
+                equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
                 operation = b.Content.ToString();
                 result = Double.Parse(tb.Text);
                 enter_value = true;
@@ -113,6 +114,25 @@ namespace simpcal
             {
                 tb.Text = "0";
             }
+        }
+
+        private void plmin_Click(object sender, RoutedEventArgs e)
+        {
+            tb.Text = (-1*Double.Parse(tb.Text)).ToString();
+        }
+
+        private void Sq_Click(object sender, RoutedEventArgs e)
+        {
+            tb.Text = (Double.Parse(tb.Text)* Double.Parse(tb.Text)).ToString();
+            result = Double.Parse(tb.Text);
+            history.Text = result.ToString();
+        }
+
+        private void rev_Click(object sender, RoutedEventArgs e)
+        {
+            tb.Text = (1/ Double.Parse(tb.Text)).ToString();
+            result = Double.Parse(tb.Text);
+            history.Text = result.ToString();
         }
     }
 }
