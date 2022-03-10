@@ -23,6 +23,9 @@ namespace simpcal
         double result = 0;
         String operation = "";
         bool enter_value = false;
+        bool reseting_number = false;
+        bool changing_operation = false;
+        string previous_operator = "";
         char iOp;
         public MainWindow()
         {
@@ -31,7 +34,16 @@ namespace simpcal
 
         private void btnNumber_Click(object sender, RoutedEventArgs e)
         {
+            changing_operation = false;
             Button b = (Button)sender;
+            if (reseting_number)
+            {
+                operation = "";
+                tb.Text = "";
+                history.Text = "";
+                reseting_number = false;
+
+            }
             if ((tb.Text == "0") || (enter_value))
             {
                 tb.Text = "";
@@ -54,20 +66,35 @@ namespace simpcal
         private void operator_Click(object sender, RoutedEventArgs e)
         {
             Button b = (Button)sender;
-            if (result != 0)
+            if (!changing_operation)
             {
-                equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
-                enter_value = true;
-                operation = b.Content.ToString();
-                history.Text = result.ToString() + " " + operation;
+                if (result != 0)
+                {
+                    equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
+                    enter_value = true;
+                    operation = b.Content.ToString();
+                    previous_operator = operation;
+                    history.Text = result.ToString() + " " + operation;
+                    changing_operation = true;
+                }
+                else
+                {
+                    equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
+                    operation = b.Content.ToString();
+                    previous_operator = operation;
+                    result = Double.Parse(tb.Text);
+                    enter_value = true;
+                    history.Text = result.ToString() + " " + operation;
+                    changing_operation = true;
+                }
             }
             else
             {
-                equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
-                operation = b.Content.ToString();
-                result = Double.Parse(tb.Text);
-                enter_value = true;
-                history.Text = result.ToString() + " " + operation;
+                if(previous_operator != b.Content.ToString())
+                {
+                    operation = b.Content.ToString();
+                    history.Text = history.Text.Remove(history.Text.Length-1) + operation;
+                }
             }
         }
 
@@ -77,6 +104,7 @@ namespace simpcal
             history.Text = "";
             result = 0;
             operation = "";
+            changing_operation = false;
         }
 
         private void equal_Click(object sender, RoutedEventArgs e)
@@ -143,10 +171,6 @@ namespace simpcal
                 result = Double.Parse(tb.Text);
                 history.Text = result.ToString();
             }
-
-            //tb.Text = (1/ Double.Parse(tb.Text)).ToString();
-            //result = Double.Parse(tb.Text);
-            //history.Text = result.ToString();
         }
     }
 }
