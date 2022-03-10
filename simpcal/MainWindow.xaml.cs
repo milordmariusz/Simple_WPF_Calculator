@@ -23,10 +23,13 @@ namespace simpcal
         double result = 0;
         String operation = "";
         bool enter_value = false;
-        bool reseting_number = false;
         bool changing_operation = false;
         string previous_operator = "";
-        char iOp;
+
+        bool equal_spam = false;
+        double first_digit;
+        double second_digit;
+        string prev_operator = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -35,15 +38,8 @@ namespace simpcal
         private void btnNumber_Click(object sender, RoutedEventArgs e)
         {
             changing_operation = false;
+            equal_spam = false;
             Button b = (Button)sender;
-            if (reseting_number)
-            {
-                operation = "";
-                tb.Text = "";
-                history.Text = "";
-                reseting_number = false;
-
-            }
             if ((tb.Text == "0") || (enter_value))
             {
                 tb.Text = "";
@@ -65,6 +61,7 @@ namespace simpcal
 
         private void operator_Click(object sender, RoutedEventArgs e)
         {
+            equal_spam = false;
             Button b = (Button)sender;
             if (!changing_operation)
             {
@@ -105,30 +102,60 @@ namespace simpcal
             result = 0;
             operation = "";
             changing_operation = false;
+            equal_spam = false;
         }
 
         private void equal_Click(object sender, RoutedEventArgs e)
         {
             history.Text = "";
-            switch (operation)
+            first_digit = result;
+            if (!equal_spam)
             {
-                case "+":
-                    tb.Text = (result + Double.Parse(tb.Text)).ToString();
-                    break;
-                case "-":
-                    tb.Text = (result - Double.Parse(tb.Text)).ToString();
-                    break;
-                case "*":
-                    tb.Text = (result * Double.Parse(tb.Text)).ToString();
-                    break;
-                case "/":
-                    tb.Text = (result / Double.Parse(tb.Text)).ToString();
-                    break;
-                default:
-                    break;
+                second_digit = Double.Parse(tb.Text);
+                prev_operator = operation;
+                switch (operation)
+                {
+                    case "+":
+                        tb.Text = (result + Double.Parse(tb.Text)).ToString();
+                        break;
+                    case "-":
+                        tb.Text = (result - Double.Parse(tb.Text)).ToString();
+                        break;
+                    case "*":
+                        tb.Text = (result * Double.Parse(tb.Text)).ToString();
+                        break;
+                    case "/":
+                        tb.Text = (result / Double.Parse(tb.Text)).ToString();
+                        break;
+                    default:
+                        break;
+                }
+                result = Double.Parse(tb.Text);
+                operation = "";
+                equal_spam = true;
             }
-            result = Double.Parse(tb.Text);
-            operation = "";
+            else
+            {
+                switch (prev_operator)
+                {
+                    case "+":
+                        tb.Text = (first_digit + second_digit).ToString();
+                        break;
+                    case "-":
+                        tb.Text = (first_digit - second_digit).ToString();
+                        break;
+                    case "*":
+                        tb.Text = (first_digit * second_digit).ToString();
+                        break;
+                    case "/":
+                        tb.Text = (first_digit / second_digit).ToString();
+                        break;
+                    default:
+                        break;
+                }
+                result = Double.Parse(tb.Text);
+                operation = "";
+            }
         }
 
         private void R_Click(object sender, RoutedEventArgs e)
@@ -151,9 +178,11 @@ namespace simpcal
 
         private void Sq_Click(object sender, RoutedEventArgs e)
         {
-            result = result + (Double.Parse(tb.Text)* Double.Parse(tb.Text));
-            tb.Text = result.ToString();
-            history.Text = result.ToString();
+            tb.Text = (Double.Parse(tb.Text) * Double.Parse(tb.Text)).ToString();
+            equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
+            result = Double.Parse(tb.Text);
+            enter_value = true;
+            history.Text = result.ToString() + " " + operation;
         }
 
         private void rev_Click(object sender, RoutedEventArgs e)
