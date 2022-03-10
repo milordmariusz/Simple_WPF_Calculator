@@ -76,7 +76,7 @@ namespace simpcal
                 }
                 else
                 {
-                    equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
+                    //equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
                     operation = b.Content.ToString();
                     previous_operator = operation;
                     result = Double.Parse(tb.Text);
