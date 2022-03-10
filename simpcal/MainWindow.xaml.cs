@@ -32,7 +32,6 @@ namespace simpcal
         private void btnNumber_Click(object sender, RoutedEventArgs e)
         {
             Button b = (Button)sender;
-
             if ((tb.Text == "0") || (enter_value))
             {
                 tb.Text = "";
@@ -77,6 +76,7 @@ namespace simpcal
             tb.Text = "0";
             history.Text = "";
             result = 0;
+            operation = "";
         }
 
         private void equal_Click(object sender, RoutedEventArgs e)
@@ -123,16 +123,30 @@ namespace simpcal
 
         private void Sq_Click(object sender, RoutedEventArgs e)
         {
-            tb.Text = (Double.Parse(tb.Text)* Double.Parse(tb.Text)).ToString();
-            result = Double.Parse(tb.Text);
+            result = result + (Double.Parse(tb.Text)* Double.Parse(tb.Text));
+            tb.Text = result.ToString();
             history.Text = result.ToString();
         }
 
         private void rev_Click(object sender, RoutedEventArgs e)
         {
-            tb.Text = (1/ Double.Parse(tb.Text)).ToString();
-            result = Double.Parse(tb.Text);
-            history.Text = result.ToString();
+            result = (1 / Double.Parse(tb.Text));
+            if (result > 1)
+            {
+                tb.Text = Math.Round(result).ToString();
+                result = Double.Parse(tb.Text);
+                history.Text = Math.Round(result).ToString();
+            }
+            else
+            {
+                tb.Text = result.ToString();
+                result = Double.Parse(tb.Text);
+                history.Text = result.ToString();
+            }
+
+            //tb.Text = (1/ Double.Parse(tb.Text)).ToString();
+            //result = Double.Parse(tb.Text);
+            //history.Text = result.ToString();
         }
     }
 }
