@@ -67,7 +67,7 @@ namespace simpcal
             }
             else
             {
-                if (tb.Text.Length < 14)
+                if (tb.Text.Length < 16)
                 {
                     tb.Text = tb.Text + b.Content.ToString();
                 }
