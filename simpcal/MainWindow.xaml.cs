@@ -41,7 +41,6 @@ namespace simpcal
             changing_operation = false;
             equal_spam = false;
             Button b = (Button)sender;
-
             if (cleaning_number)
             {
                 tb.Text = "";
@@ -59,12 +58,19 @@ namespace simpcal
             {
                 if (!tb.Text.Contains(","))
                 {
+                    if(tb.Text=="")
+                    {
+                        tb.Text = "0";
+                    }
                     tb.Text = tb.Text + b.Content.ToString();
                 }
             }
             else
             {
-                tb.Text = tb.Text + b.Content.ToString();
+                if (tb.Text.Length < 14)
+                {
+                    tb.Text = tb.Text + b.Content.ToString();
+                }
             }
         }
 
@@ -212,19 +218,32 @@ namespace simpcal
 
         private void rev_Click(object sender, RoutedEventArgs e)
         {
-            result = (1 / Double.Parse(tb.Text));
-            if (-1 < result && result < 1)
+            equal_spam = false;
+            if (Double.Parse(tb.Text) == 0)
             {
-                tb.Text = result.ToString();
-                result = Double.Parse(tb.Text);
-                history.Text = result.ToString();
+                tb.Text = "0";
             }
             else
             {
-                tb.Text = Math.Round(result).ToString();
-                result = Double.Parse(tb.Text);
-                history.Text = Math.Round(result).ToString();
-            }
+                tb.Text = (1 / Double.Parse(tb.Text)).ToString();
+                if (-1 < Double.Parse(tb.Text) && Double.Parse(tb.Text) < 1)
+                {
+                    equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
+                    result = Double.Parse(tb.Text);
+                    enter_value = true;
+                    history.Text = result.ToString() + " " + operation;
+                    //history.Text = result.ToString();
+                }
+                else
+                {
+                    tb.Text = Math.Round(Double.Parse(tb.Text)).ToString();
+                    equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
+                    result = Double.Parse(tb.Text);
+                    enter_value = true;
+                    history.Text = result.ToString() + " " + operation;
+                    //history.Text = Math.Round(result).ToString();
+                }
+            }  
         }
     }
 }
