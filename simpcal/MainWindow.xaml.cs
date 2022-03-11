@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Numerics;
 
 namespace simpcal
 {
@@ -226,6 +227,12 @@ namespace simpcal
             else
             {
                 tb.Text = (1 / Double.Parse(tb.Text)).ToString();
+                equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
+                result = Double.Parse(tb.Text);
+                enter_value = true;
+                history.Text = result.ToString() + " " + operation;
+
+                /*
                 if (-1 < Double.Parse(tb.Text) && Double.Parse(tb.Text) < 1)
                 {
                     equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
@@ -236,13 +243,14 @@ namespace simpcal
                 }
                 else
                 {
-                    tb.Text = Math.Round(Double.Parse(tb.Text)).ToString();
+                    tb.Text = Math.Round(Decimal.Parse(tb.Text)).ToString();
                     equal.RaiseEvent(new RoutedEventArgs(Button.ClickEvent, equal));
                     result = Double.Parse(tb.Text);
                     enter_value = true;
                     history.Text = result.ToString() + " " + operation;
                     //history.Text = Math.Round(result).ToString();
                 }
+                */
             }  
         }
     }
