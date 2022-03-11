@@ -25,6 +25,7 @@ namespace simpcal
         bool enter_value = false;
         bool changing_operation = false;
         string previous_operator = "";
+        bool cleaning_number = false;
 
         bool equal_spam = false;
         double first_digit;
@@ -40,6 +41,14 @@ namespace simpcal
             changing_operation = false;
             equal_spam = false;
             Button b = (Button)sender;
+
+            if (cleaning_number)
+            {
+                tb.Text = "";
+                changing_operation = false;
+                equal_spam = false;
+                cleaning_number = false;
+            }
             if ((tb.Text == "0") || (enter_value))
             {
                 tb.Text = "";
@@ -103,6 +112,7 @@ namespace simpcal
             operation = "";
             changing_operation = false;
             equal_spam = false;
+            cleaning_number = false;
         }
 
         private void equal_Click(object sender, RoutedEventArgs e)
@@ -125,7 +135,14 @@ namespace simpcal
                         tb.Text = (result * Double.Parse(tb.Text)).ToString();
                         break;
                     case "/":
-                        tb.Text = (result / Double.Parse(tb.Text)).ToString();
+                        if (Double.Parse(tb.Text) == 0)
+                        {
+                            tb.Text = "0";
+                        }
+                        else
+                        {
+                            tb.Text = (result / Double.Parse(tb.Text)).ToString();
+                        }
                         break;
                     default:
                         break;
@@ -133,6 +150,7 @@ namespace simpcal
                 result = Double.Parse(tb.Text);
                 operation = "";
                 equal_spam = true;
+                cleaning_number = true;
             }
             else
             {
@@ -148,7 +166,14 @@ namespace simpcal
                         tb.Text = (first_digit * second_digit).ToString();
                         break;
                     case "/":
-                        tb.Text = (first_digit / second_digit).ToString();
+                        if (Double.Parse(tb.Text) == 0)
+                        {
+                            tb.Text = "0";
+                        }
+                        else
+                        {
+                            tb.Text = (result / Double.Parse(tb.Text)).ToString();
+                        }
                         break;
                     default:
                         break;
@@ -188,17 +213,17 @@ namespace simpcal
         private void rev_Click(object sender, RoutedEventArgs e)
         {
             result = (1 / Double.Parse(tb.Text));
-            if (result > 1)
-            {
-                tb.Text = Math.Round(result).ToString();
-                result = Double.Parse(tb.Text);
-                history.Text = Math.Round(result).ToString();
-            }
-            else
+            if (-1 < result && result < 1)
             {
                 tb.Text = result.ToString();
                 result = Double.Parse(tb.Text);
                 history.Text = result.ToString();
+            }
+            else
+            {
+                tb.Text = Math.Round(result).ToString();
+                result = Double.Parse(tb.Text);
+                history.Text = Math.Round(result).ToString();
             }
         }
     }
