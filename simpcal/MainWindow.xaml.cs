@@ -48,6 +48,9 @@ namespace simpcal
                 changing_operation = false;
                 equal_spam = false;
                 cleaning_number = false;
+                history.Text = "";
+                result = 0;
+                operation = "";
             }
             if ((tb.Text == "0") || (enter_value))
             {
@@ -79,6 +82,10 @@ namespace simpcal
         {
             equal_spam = false;
             Button b = (Button)sender;
+            if (tb.Text.Contains("zero"))
+            {
+                return;
+            }
             if (!changing_operation)
             {
                 if (result != 0)
@@ -124,75 +131,93 @@ namespace simpcal
 
         private void equal_Click(object sender, RoutedEventArgs e)
         {
-            history.Text = "";
-            first_digit = result;
-            if (!equal_spam)
+            if (!tb.Text.Contains("zero"))
             {
-                second_digit = Double.Parse(tb.Text);
-                prev_operator = operation;
-                switch (operation)
+                history.Text = "";
+                first_digit = result;
+                if (!equal_spam)
                 {
-                    case "+":
-                        tb.Text = (result + Double.Parse(tb.Text)).ToString();
-                        break;
-                    case "-":
-                        tb.Text = (result - Double.Parse(tb.Text)).ToString();
-                        break;
-                    case "*":
-                        tb.Text = (result * Double.Parse(tb.Text)).ToString();
-                        break;
-                    case "/":
-                        if (Double.Parse(tb.Text) == 0)
-                        {
-                            tb.Text = "0";
-                        }
-                        else
-                        {
-                            tb.Text = (result / Double.Parse(tb.Text)).ToString();
-                        }
-                        break;
-                    default:
-                        break;
+                    second_digit = Double.Parse(tb.Text);
+                    prev_operator = operation;
+                    switch (operation)
+                    {
+                        case "+":
+                            tb.Text = (result + Double.Parse(tb.Text)).ToString();
+                            break;
+                        case "-":
+                            tb.Text = (result - Double.Parse(tb.Text)).ToString();
+                            break;
+                        case "*":
+                            tb.Text = (result * Double.Parse(tb.Text)).ToString();
+                            break;
+                        case "/":
+                            if (Double.Parse(tb.Text) == 0)
+                            {
+                                tb.Text = "Nie dziel przez zero";
+                                history.Text = "";
+                            }
+                            else
+                            {
+                                tb.Text = (result / Double.Parse(tb.Text)).ToString();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    if (!tb.Text.Contains("zero"))
+                    {
+                        result = Double.Parse(tb.Text);
+                        operation = "";
+                        equal_spam = true;
+                    }
+                    cleaning_number = true;
                 }
-                result = Double.Parse(tb.Text);
-                operation = "";
-                equal_spam = true;
-                cleaning_number = true;
-            }
-            else
-            {
-                switch (prev_operator)
+                else
                 {
-                    case "+":
-                        tb.Text = (first_digit + second_digit).ToString();
-                        break;
-                    case "-":
-                        tb.Text = (first_digit - second_digit).ToString();
-                        break;
-                    case "*":
-                        tb.Text = (first_digit * second_digit).ToString();
-                        break;
-                    case "/":
-                        if (Double.Parse(tb.Text) == 0)
-                        {
-                            tb.Text = "0";
-                        }
-                        else
-                        {
-                            tb.Text = (result / Double.Parse(tb.Text)).ToString();
-                        }
-                        break;
-                    default:
-                        break;
+                    switch (prev_operator)
+                    {
+                        case "+":
+                            tb.Text = (first_digit + second_digit).ToString();
+                            break;
+                        case "-":
+                            tb.Text = (first_digit - second_digit).ToString();
+                            break;
+                        case "*":
+                            tb.Text = (first_digit * second_digit).ToString();
+                            break;
+                        case "/":
+                            if (Double.Parse(tb.Text) == 0)
+                            {
+                                tb.Text = "Nie dziel przez zero";
+                                history.Text = "";
+                            }
+                            else
+                            {
+                                tb.Text = (result / Double.Parse(tb.Text)).ToString();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    result = Double.Parse(tb.Text);
+                    operation = "";
                 }
-                result = Double.Parse(tb.Text);
-                operation = "";
             }
         }
 
         private void R_Click(object sender, RoutedEventArgs e)
         {
-            if(tb.Text.Length > 0)
+            if (cleaning_number)
+            {
+                tb.Text = "0";
+                history.Text = "";
+                result = 0;
+                operation = "";
+                changing_operation = false;
+                equal_spam = false;
+                cleaning_number = false;
+            }
+            else if (tb.Text.Length > 0)
             {
                 tb.Text = tb.Text.Remove(tb.Text.Length - 1, 1);
             }
