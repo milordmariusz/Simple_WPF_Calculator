@@ -110,6 +110,7 @@ namespace simpcal
                 if(previous_operator != b.Content.ToString())
                 {
                     operation = b.Content.ToString();
+                    previous_operator = operation;
                     history.Text = history.Text.Remove(history.Text.Length-1) + operation;
                 }
             }
@@ -227,6 +228,8 @@ namespace simpcal
 
         private void plmin_Click(object sender, RoutedEventArgs e)
         {
+            changing_operation = false;
+            equal_spam = false;
             if (tb.Text.Contains("zero"))
             {
                 return;
