@@ -93,6 +93,8 @@ namespace simpcal
                     previous_operator = operation;
                     history.Text = result.ToString() + " " + operation;
                     changing_operation = true;
+                    second_digit = result;
+                    prev_operator = operation;
                 }
                 else
                 {
@@ -103,6 +105,7 @@ namespace simpcal
                     enter_value = true;
                     history.Text = result.ToString() + " " + operation;
                     changing_operation = true;
+                    second_digit = result;
                 }
             }
             else
@@ -239,6 +242,8 @@ namespace simpcal
 
         private void Sq_Click(object sender, RoutedEventArgs e)
         {
+            changing_operation = false;
+            equal_spam = false;
             if (tb.Text.Contains("zero"))
             {
                 return;
@@ -248,6 +253,7 @@ namespace simpcal
             result = Double.Parse(tb.Text);
             enter_value = true;
             history.Text = result.ToString() + " " + operation;
+            second_digit = result;
         }
 
         private void rev_Click(object sender, RoutedEventArgs e)
